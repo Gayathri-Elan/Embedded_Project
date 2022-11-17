@@ -1,0 +1,5 @@
+test.v
+processor.v
+REGISTER_FILE/design.v
+ALU/design.v
+Program_Counter/design.v
