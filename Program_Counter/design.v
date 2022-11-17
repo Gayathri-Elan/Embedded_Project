@@ -6,13 +6,10 @@ always @(pc)
     begin
         HLT=1;
         case(pc)
-            0: word=8'b0010_0010;
-            1: word=8'b0010_1101;
-            2: word=8'b0011_1000;
-            3: word=8'b0001_0111;
-            4: word=8'b0011_0001;
-            5: word=8'b0000_0111;
-            6: word=8'b0100_0011; 
+            0: word=8'b0010_0001;
+            1: word=8'b0010_1110;
+            2: word=8'b0101_0011;
+            3: word=8'b0101_1100;
             default: HLT=0;
         endcase
     end 

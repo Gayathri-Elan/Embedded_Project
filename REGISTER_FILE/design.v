@@ -7,7 +7,8 @@ input[7:0] in,
 output reg[7:0] out,
 input[1:0] read_write,
 input[1:0] rw_reg,
-input reg_on
+input reg_on,
+input [1:0] inp_flagReg
 );
         reg[7:0]regs[3:0];//the 4 registers we have
         reg[7:0]externalmemory[15:0];
@@ -27,6 +28,11 @@ input reg_on
             else
                 begin
                     begin
+                        
+                        flagReg = inp_flagReg;
+                        
+                        $display("the value of flag register is %b",flagReg);
+
                         case(opcode)
                             4'b0000: //load from memory LD
                                 begin
@@ -50,23 +56,9 @@ input reg_on
                                     regs[rd] = {{6{word[1]}},{word[1:0]}} ;
                                     $display("the value of register %b is %b",rd,regs[rd]);
                                 end
-                            4'b0111,4'b1111: //CM AND CMI INSTRUCTION
-                                begin
-                                    if(in == 8'b0000_0000)
-                                        begin
-                                            flagReg = 2'b01;
-                                        end
-                                    else if(in == 8'b0000_0001)
-                                        begin
-                                            flagReg = 2'b10;
-                                        end
-                                    else if(in == 8'b0000_0010)
-                                        begin
-                                            flagReg = 2'b00;
-                                        end 
-                                    $display("the value of flag register is %b",flagReg);
-                                end
+                                
                         endcase
+
                         case(read_write)
                             2'b10:
                                 begin 

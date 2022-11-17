@@ -6,7 +6,7 @@ module processor(input clk,input rst);
     reg[1:0] read_write;
     reg[1:0] rw_reg;
     integer count;//to count number of clock cycles
-    registerFile rf(clk,rst,word,rf_in,rf_out,read_write,rw_reg,rf_on);
+    registerFile rf(clk,rst,word,rf_in,rf_out,read_write,rw_reg,rf_on,flagReg);
                 //---------------PC-------------//
     wire[7:0] word; //declaration of databus
     reg[15:0] pc;
@@ -15,8 +15,10 @@ module processor(input clk,input rst);
     programcounter pcounter(pc,word,HLT);
     always@(posedge increment)
     begin
+        
+        $display("%d instruction: %b",pc+1,word);
+        $display("");
         pc=pc+1;
-        $display("next instruction begins");
         count=0;
     end
       //------------ ALU -------------//
@@ -24,10 +26,12 @@ module processor(input clk,input rst);
     reg[7:0] alu_in2;
     wire[7:0] alu_out;
     reg ALU;
-    ALU  alu(alu_out,clk,alu_in1,alu_in2,word,ALU);
+    wire [1:0] flagReg;
+    ALU  alu(alu_out,clk,alu_in1,alu_in2,word,ALU,flagReg,rst);
             always@(HLT)
             begin
-                $display("thank you for using our processor");
+                $display("HALT");
+                $display("");
             end
             always @(posedge clk,posedge rst)
 
@@ -107,7 +111,7 @@ module processor(input clk,input rst);
                                                 rw_reg = word[3:2];
                                                 rf_in = alu_out;
                                                 $display("this is the alu output %b",alu_out);
-                                                
+                                                $display("");
                                             end//this is the control signal to increment program counter to get next instruction
                                             5:
                                             begin
@@ -155,6 +159,7 @@ module processor(input clk,input rst);
                                                 rw_reg = word[3:2];
                                                 rf_in = alu_out;
                                                 $display("this is the output %b",alu_out);
+                                                $display("");
                                             end//this is the control signal to increment program counter to get next instruction
                                             5:
                                             begin
